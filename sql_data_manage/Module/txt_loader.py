@@ -1,4 +1,5 @@
 import os
+from tqdm import tqdm
 
 
 class TXTLoader(object):
@@ -20,4 +21,8 @@ class TXTLoader(object):
             print('[ERROR][TXTLoader::loadFile]')
             print('\t txt file not exist!')
             print('\t', txt_file_path)
+
+        with open(txt_file_path, 'r', encoding='utf-8') as f:
+            data = f.readline()
+            print(data)
         return True
