@@ -1,4 +1,4 @@
-EN_CN_MAP = {
+INFO_EN_CN_MAP = {
     'order_id': '就诊编号',
     'order_id_his': '医院就诊号',
     'gender': '性别',
