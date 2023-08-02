@@ -47,7 +47,7 @@ class TXTLoader(object):
 
             self.loadTitle(title, remove_quotes)
 
-            for _ in tqdm(range(data_num)):
+            for i in tqdm(range(data_num)):
                 data = f.readline()
 
                 if data == '\n':
@@ -60,7 +60,9 @@ class TXTLoader(object):
                     continue
 
                 self.data_list_list.append(data_list)
-                break
+                # FIXME: tmp break for test
+                if i > 1000:
+                    break
 
         if invalid_data_num > 0:
             print('[WARN][TXTLoader::loadFile]')
