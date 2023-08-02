@@ -1,11 +1,11 @@
+from sql_data_manage.Config.info_title import INFO_QUERY_TITLE_LIST
 from sql_data_manage.Module.txt_loader import TXTLoader
 
 
 def demo():
     txt_file_path = "/home/chli/chLi/Sql-Dataset/text/dat_order.txt"
-    # txt_file_path = "/home/chli/chLi/Sql-Dataset/text/dat_order_item.txt"
     remove_quotes = True
-    query_title_list = None
+    query_title_list = INFO_QUERY_TITLE_LIST
     prompt_type = '[TITLE]:[DATA]'
     prompt_multi_line = False
     skip_empty_prompt = True
