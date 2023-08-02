@@ -6,6 +6,7 @@ from sql_data_manage.Config.info_translate import INFO_EN_CN_MAP
 from sql_data_manage.Config.med_title import MED_QUERY_TITLE_LIST
 from sql_data_manage.Config.med_translate import MED_EN_CN_MAP
 from sql_data_manage.Method.path import createFileFolder, removeFile, renameFile
+from sql_data_manage.Method.prompt import mergePrompt
 from sql_data_manage.Module.txt_loader import TXTLoader
 from tqdm import tqdm
 
@@ -77,11 +78,13 @@ class PromptGenerator(object):
         renameFile(tmp_save_file_path, save_file_path)
         return True
 
-    def generateAllPrompt(self, save_folder_path):
+    def generateAllPrompt(self, save_folder_path, dataset_file_path):
         print('[INFO][PromptGenerator::generateAllPrompt]')
         print('\t start generate prompt dataset...')
         for file_path in tqdm(self.file_path_list):
             file_basename = file_path.split('/')[-1].split('.')[0]
             save_file_path = save_folder_path + file_basename + '.json'
             self.generatePrompt(file_path, save_file_path)
+
+        mergePrompt(save_folder_path, dataset_file_path)
         return True
