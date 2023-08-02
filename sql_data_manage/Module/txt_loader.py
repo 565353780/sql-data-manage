@@ -49,7 +49,7 @@ class TXTLoader(object):
 
             self.loadTitle(title, remove_quotes)
 
-            for i in tqdm(range(data_num)):
+            for _ in tqdm(range(data_num)):
                 data = f.readline()
 
                 if data == '\n':
@@ -68,39 +68,102 @@ class TXTLoader(object):
             print('\t found', invalid_data_num, 'invalid data!')
         return True
 
-    def getData(self, title, idx=None):  # sourcery skip: class-extract-method
-        if title not in self.title_list:
-            print('[ERROR][TXTLoader::getData]')
-            print('\t title not found!')
-            return False, None
+    def getRowData(self, idx_list):
+        assert idx_list is not None
 
-        title_id = self.title_id_map[title]
+        if len(idx_list) == 0:
+            print('[WARN][TXTLoader::getRowData]')
+            print('\t idx_list is empty!')
+            return True, []
+
+        row_data = []
+
         total_data_num = len(self.data_list_list)
 
-        if idx is None:
-            return True, [self.data_list_list[i][title_id]
-                          for i in range(total_data_num)]
-
-        if isinstance(idx, list):
-            for id in idx:
-                if id < 0 or id >= total_data_num:
-                    print('[ERROR][TXTLoader::getData]')
-                    print('\t idx out of range!')
-                    return False, None
-
-            return True, [self.data_list_list[i][title_id] for i in idx]
-
-        if isinstance(idx, int):
+        for idx in idx_list:
             if idx < 0 or idx >= total_data_num:
-                print('[ERROR][TXTLoader::getData]')
-                print('\t idx out of range!')
-                return False, None
+                print('[WARN][TXTLoader::getRowData]')
+                print('\t idx [' + str(idx) + '] out of range!')
+                continue
 
-            return True, self.data_list_list[idx][title_id]
+            row_data.append(self.data_list_list[idx])
 
-        print('[ERROR][TXTLoader::getData]')
-        print('\t idx not valid!')
-        return False, None
+        return True, row_data
+
+    def getColData(self, title_list):
+        assert title_list is not None
+
+        if len(title_list) == 0:
+            print('[WARN][TXTLoader::getColData]')
+            print('\t title_list is empty!')
+            return True, []
+
+        title_id_list = []
+        for title in title_list:
+            if title not in self.title_list:
+                print('[WARN][TXTLoader::getColData]')
+                print('\t title [' + title + '] not found!')
+                continue
+            title_id_list.append(self.title_id_map[title])
+
+        total_data_num = len(self.data_list_list)
+
+        col_data = [
+            [self.data_list_list[i][title_id] for title_id in title_id_list]
+            for i in total_data_num
+        ]
+        return True, col_data
+
+    def getData(self, title_list=None, idx_list=None):
+        if title_list is None:
+            if idx_list is None:
+                return True, self.data_list_list
+
+            return self.getRowData(idx_list)
+
+        if idx_list is None:
+            return self.getColData(title_list)
+
+        title_id_list = []
+        for title in title_list:
+            if title not in self.title_list:
+                print('[WARN][TXTLoader::getData]')
+                print('\t title [' + title + '] not found!')
+                continue
+            title_id_list.append(self.title_id_map[title])
+
+        total_data_num = len(self.data_list_list)
+
+        data = []
+
+        for idx in idx_list:
+            if idx < 0 or idx >= total_data_num:
+                print('[WARN][TXTLoader::getData]')
+                print('\t idx [' + str(idx) + '] out of range!')
+                continue
+
+            data.append([self.data_list_list[idx][title_id]
+                        for title_id in title_id_list])
+        return True, data
+
+    def getDataIdxList(self, title, data):
+        if title not in self.title_list:
+            print('[ERROR][TXTLoader::getDataIdxList]')
+            print('\t title not found!')
+            return None
+
+        title_id = self.title_id_map[title]
+
+        idx_list = []
+
+        total_data_num = len(self.data_list_list)
+
+        for i in range(total_data_num):
+            current_data = self.data_list_list[i][title_id]
+            if current_data == data:
+                idx_list.append(i)
+
+        return idx_list
 
     def generatePrompt(self, query_title_list=None,
                        prompt_type='[TITLE] is [DATA]',
