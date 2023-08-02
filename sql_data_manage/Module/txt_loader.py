@@ -36,7 +36,9 @@ class TXTLoader(object):
             print('\t txt file not exist!')
             print('\t', txt_file_path)
 
-        data_num = getLineNum(txt_file_path) - 1
+        # data_num = getLineNum(txt_file_path) - 1
+        # FIXME: tmp break for test
+        data_num = 1001
 
         invalid_data_num = 0
 
@@ -60,14 +62,45 @@ class TXTLoader(object):
                     continue
 
                 self.data_list_list.append(data_list)
-                # FIXME: tmp break for test
-                if i > 1000:
-                    break
 
         if invalid_data_num > 0:
             print('[WARN][TXTLoader::loadFile]')
             print('\t found', invalid_data_num, 'invalid data!')
         return True
+
+    def getData(self, title, idx=None):  # sourcery skip: class-extract-method
+        if title not in self.title_list:
+            print('[ERROR][TXTLoader::getData]')
+            print('\t title not found!')
+            return False, None
+
+        title_id = self.title_id_map[title]
+        total_data_num = len(self.data_list_list)
+
+        if idx is None:
+            return True, [self.data_list_list[i][title_id]
+                          for i in range(total_data_num)]
+
+        if isinstance(idx, list):
+            for id in idx:
+                if id < 0 or id >= total_data_num:
+                    print('[ERROR][TXTLoader::getData]')
+                    print('\t idx out of range!')
+                    return False, None
+
+            return True, [self.data_list_list[i][title_id] for i in idx]
+
+        if isinstance(idx, int):
+            if idx < 0 or idx >= total_data_num:
+                print('[ERROR][TXTLoader::getData]')
+                print('\t idx out of range!')
+                return False, None
+
+            return True, self.data_list_list[idx][title_id]
+
+        print('[ERROR][TXTLoader::getData]')
+        print('\t idx not valid!')
+        return False, None
 
     def generatePrompt(self, query_title_list=None,
                        prompt_type='[TITLE] is [DATA]',
