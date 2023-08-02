@@ -1,5 +1,5 @@
 import os
-from sql_data_manager.Module.txt_loader import TXTLoader
+from sql_data_manage.Module.txt_loader import TXTLoader
 
 
 class DataMatcher(object):

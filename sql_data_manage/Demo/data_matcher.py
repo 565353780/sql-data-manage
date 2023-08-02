@@ -9,4 +9,6 @@ def demo():
     remove_quotes = True
 
     data_matcher = DataMatcher(txt_file_path_dict, remove_quotes)
+
+    print(data_matcher.txt_loader_dict.keys())
     return True
