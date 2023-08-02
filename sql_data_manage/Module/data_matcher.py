@@ -111,7 +111,7 @@ class DataMatcher(object):
         removeFile(tmp_save_file_path)
         with open(tmp_save_file_path, 'w') as f:
             json.dump(match_data_dict, f, ensure_ascii=False)
-        removeFile(tmp_save_file_path, save_file_path)
+        renameFile(tmp_save_file_path, save_file_path)
         return True
 
     def generateMatchDataDictList(self, match_title, save_folder_path):
