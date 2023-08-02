@@ -17,5 +17,8 @@ def demo():
 
     data_matcher.generatePrompt(match_title)
 
+    print(len(data_matcher.match_data_list_list_list))
+    print(data_matcher.match_data_list_list_list[0])
+
     print(len(data_matcher.prompt_list))
     return True
