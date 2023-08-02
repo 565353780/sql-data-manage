@@ -13,5 +13,5 @@ ID_TITLE_LIST = [
     'medical_type',
 ]
 
-QUERY_TITLE_LIST = \
+MED_QUERY_TITLE_LIST = \
     MED_TITLE_LIST

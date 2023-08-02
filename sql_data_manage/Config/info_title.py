@@ -118,9 +118,20 @@ DOCTOR_TITLE_LIST = [
     'pathologic_diag',
 ]
 
+RESULT_TITLE_LIST = [
+    'out_dept',
+    'diagnose',
+    'drg_name',
+    # 'ss_name',
+    'dip_diag_name',
+]
+
+'''
 INFO_QUERY_TITLE_LIST = \
     PERSON_TITLE_LIST + \
     CHILD_TITLE_LIST + \
     MEDICAL_TITLE_LIST + \
     HOSPITAL_TITLE_LIST + \
     ILL_TITLE_LIST
+'''
+INFO_QUERY_TITLE_LIST = RESULT_TITLE_LIST
