@@ -1,18 +1,23 @@
 def getUnitPrompt(title, data, prompt_type='[TITLE] is [DATA]'):
-    return prompt_type.replace('A', title).replace('B', data)
+    return prompt_type.replace('[TITLE]', title).replace('[DATA]', data)
 
 
-def getPrompt(title_list, data_list, prompt_type='[TITLE] is [DATA]',
+def getPrompt(title_list, title_id_map, data_list, query_title_list,
+              prompt_type='[TITLE] is [DATA]',
               multi_line=False, skip_empty=False):
     assert '[TITLE]' in prompt_type and '[DATA]' in prompt_type
 
     prompt = ''
 
-    title_num = len(title_list)
+    title_num = len(query_title_list)
 
     iter_idx = 0
 
-    for title, data in zip(title_list, data_list):
+    for query_title in query_title_list:
+        title_id = title_id_map[query_title]
+        title = title_list[title_id]
+        data = data_list[title_id]
+
         iter_idx += 1
 
         if data == '':
