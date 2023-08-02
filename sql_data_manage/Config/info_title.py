@@ -118,7 +118,7 @@ DOCTOR_TITLE_LIST = [
     'pathologic_diag',
 ]
 
-QUERY_TITLE_LIST = \
+INFO_QUERY_TITLE_LIST = \
     PERSON_TITLE_LIST + \
     CHILD_TITLE_LIST + \
     MEDICAL_TITLE_LIST + \
