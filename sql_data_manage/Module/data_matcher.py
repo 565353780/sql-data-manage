@@ -1,13 +1,14 @@
 import os
+import json
 from tqdm import tqdm
+from sql_data_manage.Method.path import \
+    createFileFolder, renameFile, removeFile
 from sql_data_manage.Module.txt_loader import TXTLoader
 
 
 class DataMatcher(object):
     def __init__(self, txt_file_path_dict=None, remove_quotes=True):
         self.txt_loader_dict = {}
-        self.prompt_list = []
-        self.match_data_list_list_list = []
 
         if txt_file_path_dict is not None:
             self.loadData(txt_file_path_dict, remove_quotes)
@@ -19,8 +20,6 @@ class DataMatcher(object):
                 txt_loader.reset()
 
         self.txt_loader_dict = {}
-        self.prompt_list = []
-        self.match_data_list_list_list = []
         return True
 
     def loadData(self, txt_file_path_dict, remove_quotes=False):
@@ -81,29 +80,45 @@ class DataMatcher(object):
 
         return list(unit_match_data_set)
 
-    def generatePrompt(self, match_title):
+    def generateMatchDataDict(self, match_title, unit_match_data,
+                              save_file_path):
+        if os.path.exists(save_file_path):
+            return True
+
+        match_data_dict = {}
+        for key, data_loader in self.txt_loader_dict.items():
+            match_data_dict[key] = [data_loader.title_list]
+
+            idx_list = data_loader.getDataIdxList(
+                match_title, unit_match_data)
+            if idx_list is None:
+                print('[WARN][DataMatcher::generateMatchDataDict]')
+                print('\t title [' + match_title + '] not found in [' +
+                      key + ']!')
+                continue
+
+            success, row_data_list = data_loader.getData(idx_list=idx_list)
+            if not success:
+                print('[WARN][DataMatcher::generateMatchDataDict]')
+                print('\t getData for title [' + match_title +
+                      '] in [' + key + '] failed!')
+                continue
+
+            match_data_dict[key] += row_data_list
+
+        createFileFolder(save_file_path)
+        tmp_save_file_path = f'{save_file_path[:-5]}_tmp.json'
+        removeFile(tmp_save_file_path)
+        with open(tmp_save_file_path, 'w') as f:
+            json.dump(match_data_dict, f, ensure_ascii=False)
+        removeFile(tmp_save_file_path, save_file_path)
+        return True
+
+    def generateMatchDataDictList(self, match_title, save_folder_path):
         unit_match_data_list = self.getUnitMatchDataList(match_title)
-        print('unit_match_data_list:')
-        print(len(unit_match_data_list))
 
         for unit_match_data in tqdm(unit_match_data_list):
-            match_data_list_list = []
-            for key, data_loader in self.txt_loader_dict.items():
-                idx_list = data_loader.getDataIdxList(
-                    match_title, unit_match_data)
-                if idx_list is None:
-                    print('[WARN][DataMatcher::generatePrompt]')
-                    print('\t title [' + match_title + '] not found in [' +
-                          key + ']!')
-                    continue
-                success, row_data_list = data_loader.getData(idx_list=idx_list)
-                if not success:
-                    print('[WARN][DataMatcher::generatePrompt]')
-                    print('\t getData for title [' + match_title +
-                          '] in [' + key + '] failed!')
-                    continue
-
-                match_data_list_list += row_data_list
-
-            self.match_data_list_list_list.append(match_data_list_list)
+            save_file_path = save_folder_path + unit_match_data + '.json'
+            self.generateMatchDataDict(
+                match_title, unit_match_data, save_file_path)
         return True
