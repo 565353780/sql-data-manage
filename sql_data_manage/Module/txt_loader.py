@@ -36,9 +36,7 @@ class TXTLoader(object):
             print('\t txt file not exist!')
             print('\t', txt_file_path)
 
-        # data_num = getLineNum(txt_file_path) - 1
-        # FIXME: tmp break for test
-        data_num = 1001
+        data_num = getLineNum(txt_file_path) - 1
 
         invalid_data_num = 0
 
@@ -110,7 +108,7 @@ class TXTLoader(object):
 
         col_data = [
             [self.data_list_list[i][title_id] for title_id in title_id_list]
-            for i in total_data_num
+            for i in range(total_data_num)
         ]
         return True, col_data
 
