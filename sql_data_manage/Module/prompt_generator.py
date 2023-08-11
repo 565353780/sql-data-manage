@@ -86,5 +86,7 @@ class PromptGenerator(object):
             save_file_path = save_folder_path + file_basename + '.json'
             self.generatePrompt(file_path, save_file_path)
 
-        mergePrompt(save_folder_path, dataset_file_path)
         return True
+
+    def generatePromptDataset(self, save_folder_path, dataset_file_path):
+        return mergePrompt(save_folder_path, dataset_file_path)

@@ -44,22 +44,17 @@ def getPrompt(title_list, title_id_map, data_list, query_title_list,
     return prompt
 
 
-def mergePrompt(prompt_folder_path, dataset_file_path):
-    if os.path.exists(dataset_file_path):
-        print('[ERROR][prompt::mergePrompt]')
-        print('\t dataset file already exist!')
-        return False
-
+def getPromptJsonList(prompt_folder_path):
     if not os.path.exists(prompt_folder_path):
-        print('[ERROR][prompt::mergePrompt]')
+        print('[ERROR][prompt::getPromptJsonList]')
         print('\t prompt folder not exist!')
-        return False
+        return None
 
     prompt_json_list = []
 
     prompt_filename_list = os.listdir(prompt_folder_path)
 
-    print('[INFO][prompt::mergePrompt]')
+    print('[INFO][prompt::getPromptJsonList]')
     print('\t start load all prompts...')
     for prompt_filename in tqdm(prompt_filename_list):
         if prompt_filename[-5:] != '.json':
@@ -72,11 +67,40 @@ def mergePrompt(prompt_folder_path, dataset_file_path):
         with open(prompt_file_path, 'r') as f:
             prompt_json = json.load(f)
             prompt_json_list.append(prompt_json)
+    return prompt_json_list
 
+
+def savePromptDataset(prompt_json_list, dataset_file_path):
     createFileFolder(dataset_file_path)
     tmp_dataset_file_path = f'{dataset_file_path[:-5]}_tmp.json'
     removeFile(tmp_dataset_file_path)
     with open(tmp_dataset_file_path, 'w') as f:
         json.dump(prompt_json_list, f, ensure_ascii=False)
     renameFile(tmp_dataset_file_path, dataset_file_path)
+    return True
+
+
+def mergePrompt(prompt_folder_path, dataset_file_path, train_percent=0.9):
+    if os.path.exists(dataset_file_path):
+        print('[ERROR][prompt::mergePrompt]')
+        print('\t dataset file already exist!')
+        return False
+
+    prompt_json_list = getPromptJsonList(prompt_folder_path)
+
+    total_prompt_num = len(prompt_json_list)
+
+    assert total_prompt_num > 2
+
+    train_prompt_num = int(total_prompt_num * train_percent)
+    train_prompt_num = max(1, train_prompt_num)
+    train_prompt_num = min(total_prompt_num-1, train_prompt_num)
+
+    train_dataset_file_path = f'{dataset_file_path[:-5]}_train.json'
+    val_dataset_file_path = f'{dataset_file_path[:-5]}_val.json'
+
+    savePromptDataset(
+        prompt_json_list[:train_prompt_num], train_dataset_file_path)
+    savePromptDataset(
+        prompt_json_list[train_prompt_num:], val_dataset_file_path)
     return True
