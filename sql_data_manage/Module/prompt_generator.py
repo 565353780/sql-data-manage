@@ -85,7 +85,6 @@ class PromptGenerator(object):
             file_basename = file_path.split('/')[-1].split('.')[0]
             save_file_path = save_folder_path + file_basename + '.json'
             self.generatePrompt(file_path, save_file_path)
-
         return True
 
     def generatePromptDataset(self, save_folder_path, dataset_file_path):
