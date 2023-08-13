@@ -13,5 +13,12 @@ ID_TITLE_LIST = [
     'medical_type',
 ]
 
+SIMPLE_TEST_LIST = [
+    'item_name',
+]
+
+# MED_QUERY_TITLE_LIST = \
+#    MED_TITLE_LIST
+
 MED_QUERY_TITLE_LIST = \
-    MED_TITLE_LIST
+    SIMPLE_TEST_LIST
