@@ -87,5 +87,5 @@ class PromptGenerator(object):
             self.generatePrompt(file_path, save_file_path)
         return True
 
-    def generatePromptDataset(self, save_folder_path, dataset_file_path):
-        return mergePrompt(save_folder_path, dataset_file_path)
+    def generatePromptDataset(self, save_folder_path, dataset_file_path, train_percent):
+        return mergePrompt(save_folder_path, dataset_file_path, train_percent)

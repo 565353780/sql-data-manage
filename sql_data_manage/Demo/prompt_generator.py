@@ -17,7 +17,7 @@ def demo():
 def demo_merge():
     save_folder_path = '/home/chli/chLi/Sql-Dataset/alpaca_dataset/'
     dataset_file_path = '/home/chli/chLi/Sql-Dataset/data1.json'
-    train_percent = 0.9
+    train_percent = 0.99
 
     prompt_generator = PromptGenerator()
     prompt_generator.generatePromptDataset(
