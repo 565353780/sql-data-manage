@@ -6,5 +6,5 @@ from sql_data_manage.Demo.prompt_generator import demo_merge as demo_generate_da
 if __name__ == '__main__':
     # demo_load_txt()
     # demo_match_data()
-    # demo_generate_prompt()
-    demo_generate_dataset()
+    demo_generate_prompt()
+    # demo_generate_dataset()

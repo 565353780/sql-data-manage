@@ -51,18 +51,18 @@ class PromptGenerator(object):
         info_loader = TXTLoader.fromList(info_data_list)
 
         med_loader.generatePrompt(
-            MED_QUERY_TITLE_LIST, '[TITLE]为[DATA]',
+            MED_QUERY_TITLE_LIST, '[DATA]',
             skip_empty_prompt=True, translate_map=MED_EN_CN_MAP)
         info_loader.generatePrompt(
-            INFO_QUERY_TITLE_LIST, '[TITLE]为[DATA]',
+            INFO_QUERY_TITLE_LIST, '[TITLE]:[DATA]',
             skip_empty_prompt=True, translate_map=INFO_EN_CN_MAP)
 
-        question_prompt = '患者治疗过程如下：\n'
-        for i, prompt in enumerate(med_loader.prompt_list):
-            question_prompt += f'第{str(i + 1)}次治疗，{prompt}' + '\n'
-        question_prompt += '请问患者的诊断结果是什么？'
+        question_prompt = '患者治疗过程如下:'
+        for prompt in med_loader.prompt_list:
+            question_prompt += f'{prompt},'
+        question_prompt += '请问患者的诊断结果是什么?'
 
-        answer_prompt = '患者的诊断结果为：\n' + info_loader.prompt_list[0]
+        answer_prompt = f'患者的诊断结果为:{info_loader.prompt_list[0]}'
 
         save_json = {
             'instruction': question_prompt,
@@ -87,5 +87,6 @@ class PromptGenerator(object):
             self.generatePrompt(file_path, save_file_path)
         return True
 
-    def generatePromptDataset(self, save_folder_path, dataset_file_path, train_percent):
+    def generatePromptDataset(self, save_folder_path, dataset_file_path,
+                              train_percent):
         return mergePrompt(save_folder_path, dataset_file_path, train_percent)

@@ -187,12 +187,6 @@ class TXTLoader(object):
             print('\t valid query title not found!')
             return False
 
-        if '[TITLE]' not in prompt_type or '[DATA]' not in prompt_type:
-            print('[ERROR][TXTLoader::generatePrompt]')
-            print('\t prompt type not valid!')
-            print('\t valid prompt type must contain "[TITLE]" and "[DATA]"!')
-            return False
-
         for_data = self.data_list_list
         if print_progress:
             print('[INFO][TXTLoader::generatePrompt]')

@@ -14,8 +14,6 @@ def getUnitPrompt(title, data, prompt_type='[TITLE] is [DATA]',
 def getPrompt(title_list, title_id_map, data_list, query_title_list,
               prompt_type='[TITLE] is [DATA]',
               multi_line=False, skip_empty=False, translate_map=None):
-    assert '[TITLE]' in prompt_type and '[DATA]' in prompt_type
-
     prompt = ''
 
     title_num = len(query_title_list)
