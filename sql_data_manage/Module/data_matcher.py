@@ -109,7 +109,7 @@ class DataMatcher(object):
         createFileFolder(save_file_path)
         tmp_save_file_path = f'{save_file_path[:-5]}_tmp.json'
         removeFile(tmp_save_file_path)
-        with open(tmp_save_file_path, 'w') as f:
+        with open(tmp_save_file_path, 'w', encoding='utf-8') as f:
             json.dump(match_data_dict, f, ensure_ascii=False)
         renameFile(tmp_save_file_path, save_file_path)
         return True

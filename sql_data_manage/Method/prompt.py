@@ -1,7 +1,9 @@
-import os
 import json
+import os
+
+from sql_data_manage.Method.path import \
+    createFileFolder, removeFile, renameFile
 from tqdm import tqdm
-from sql_data_manage.Method.path import createFileFolder, removeFile, renameFile
 
 
 def getUnitPrompt(title, data, prompt_type='[TITLE] is [DATA]',
@@ -62,7 +64,7 @@ def getPromptJsonList(prompt_folder_path):
             continue
 
         prompt_file_path = prompt_folder_path + prompt_filename
-        with open(prompt_file_path, 'r') as f:
+        with open(prompt_file_path, 'r', encoding='utf-8') as f:
             prompt_json = json.load(f)
             prompt_json_list.append(prompt_json)
     return prompt_json_list
@@ -72,7 +74,7 @@ def savePromptDataset(prompt_json_list, dataset_file_path):
     createFileFolder(dataset_file_path)
     tmp_dataset_file_path = f'{dataset_file_path[:-5]}_tmp.json'
     removeFile(tmp_dataset_file_path)
-    with open(tmp_dataset_file_path, 'w') as f:
+    with open(tmp_dataset_file_path, 'w', encoding='utf-8') as f:
         json.dump(prompt_json_list, f, ensure_ascii=False)
     renameFile(tmp_dataset_file_path, dataset_file_path)
     return True

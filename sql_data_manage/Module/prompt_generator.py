@@ -41,7 +41,7 @@ class PromptGenerator(object):
         if os.path.exists(save_file_path):
             return True
 
-        with open(data_file_path, 'r') as f:
+        with open(data_file_path, 'r', encoding='utf-8') as f:
             data_dict = json.load(f)
 
         med_data_list = data_dict['dat_order_item']
@@ -73,7 +73,7 @@ class PromptGenerator(object):
         createFileFolder(save_file_path)
         tmp_save_file_path = f'{save_file_path[:-5]}_tmp.json'
         removeFile(tmp_save_file_path)
-        with open(tmp_save_file_path, 'w') as f:
+        with open(tmp_save_file_path, 'w', encoding='utf-8') as f:
             json.dump(save_json, f, ensure_ascii=False)
         renameFile(tmp_save_file_path, save_file_path)
         return True
