@@ -54,18 +54,19 @@ class PromptGenerator(object):
             MED_QUERY_TITLE_LIST, '[DATA]',
             skip_empty_prompt=True, translate_map=MED_EN_CN_MAP)
         info_loader.generatePrompt(
-            INFO_QUERY_TITLE_LIST, '[TITLE]:[DATA]',
+            INFO_QUERY_TITLE_LIST, '[DATA]',
             skip_empty_prompt=True, translate_map=INFO_EN_CN_MAP)
 
-        question_prompt = '患者治疗过程如下:'
+        # question_prompt = '患者治疗过程如下:'
+        question_prompt = ''
         for prompt in med_loader.prompt_list:
             question_prompt += f'{prompt},'
-        question_prompt += '请问患者的诊断结果是什么?'
+        # question_prompt += '请问患者的诊断结果是什么?'
 
-        answer_prompt = f'患者的诊断结果为:{info_loader.prompt_list[0]}'
+        answer_prompt = info_loader.prompt_list[0]
 
         save_json = {
-            'instruction': question_prompt,
+            'instruction': question_prompt[:-1],
             'input': '',
             'output': answer_prompt,
         }
